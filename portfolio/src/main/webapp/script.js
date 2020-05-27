@@ -13,16 +13,16 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Allow user to change background color to another pastel.
  */
-function addRandomGreeting() {
+function pickPastelColor() {
   const pastels =
       ['#fac0e5', '#beebfa', '#fae5c0', '#ebc7ff', '#fff9c7', "#caf5e3", "#f7c3be", "#e2f7cb"];
 
-  // Pick a random color.
+  // Pick a pastel color.
   const pastel = pastels[Math.floor(Math.random() * pastels.length)];
 
-  // Add it to the page.
+  // Make the background color change.
   const body = document.getElementById('body');
   body.style.background = pastel;
 }
