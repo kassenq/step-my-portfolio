@@ -1,38 +1,29 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito+Sans:400,700");
 body {
-    font-family: 'Anaheim', san-serif;
-    font-weight: 400;
-    background-color: #caf5e3;
-    text-align: center;
+  font-family: 'Anaheim', san-serif;
+  font-weight: 400;
+  background-color: #caf5e3;
+  text-align: center;
 }
 h2, p, a {
-    font-family: 'Anaheim', sans-serif;
-    font-weight: 400;
+  font-family: 'Anaheim', sans-serif;
+  font-weight: 400;
 }
 img {
-    height: 400px;
-    width: auto;
+  height: 400px;
+  width: auto;
 }
 a:link, a:visited, a:active {
-    color: rgb(211, 161, 161);
+  color: rgb(211, 161, 161);
 }
 a:hover {
-    color: rgb(209, 124, 124);
+  color: rgb(209, 124, 124);
 }
 .fa {
-    width: 5em;
-    height: auto;
+  width: 5em;
+  height: auto;
 }
 .project-img {
-    width: 25em;
-    height: auto;
+  width: 25em;
+  height: auto;
 }
-/* #content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
-}
-
-#greeting-container {
-  margin-top: 20px;
-} */
