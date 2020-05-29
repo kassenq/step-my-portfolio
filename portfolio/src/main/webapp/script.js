@@ -26,3 +26,14 @@ function pickPastelColor() {
   const body = document.getElementById('body');
   body.style.background = pastel;
 }
+
+function getRandomQuoteUsingArrowFunctions() {
+  fetch('/random-quote').then(response => response.text()).then((quote) => {
+    document.getElementById('quote-container').innerText = quote;
+  });
+}
+function getRandomFactUsingArrowFunctions() {
+  fetch('/data').then(response => response.text()).then((fact) => {
+    document.getElementById('fact-container').innerText = fact;
+  });
+}
