@@ -13,9 +13,13 @@
 // limitations under the License.
 
 package com.google.sps.servlets;
+// import com.google.sps.data.Task;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,15 +43,29 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // String fact = facts.get((int) (Math.random() * facts.size()));
-  
-    // Convert to JSON
-    String json = convertToJsonUsingGson(comments);
+    Query query = new Query("Task");
 
-    // Send the JSON as the response
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    // Loop over entities
+    List<String> comments = new ArrayList<String>();
+    for (Entity entity : results.asIterable()) {
+      long id = entity.getKey().getId();
+      String name = (String) entity.getProperty("name");
+      String text = (String) entity.getProperty("text");
+      long timestamp = (long) entity.getProperty("timestamp");
+      comments.add(text);
+      // String task = new Task(id, name, text, timestamp);
+      // tasks.add(task);
+    }
+  
+    Gson gson = new Gson();
+
     response.setContentType("application/json;");
-    response.getWriter().println(json);
+    response.getWriter().println(gson.toJson(comments));
   }
+
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
     String name = getParameter(request, "name-input", "");
@@ -66,8 +84,8 @@ public class DataServlet extends HttpServlet {
     datastore.put(taskEntity);
 
     // Respond with the result.
-    response.setContentType("text/html;");
-    response.getWriter().println(name + text);
+    // response.setContentType("text/html;");
+    // response.getWriter().println(name + text);
     response.sendRedirect("/comments.html");
   }
     /**
