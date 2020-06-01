@@ -13,7 +13,9 @@
 // limitations under the License.
 
 package com.google.sps.servlets;
-
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,11 +52,23 @@ public class DataServlet extends HttpServlet {
     // Get the input from the form.
     String name = getParameter(request, "name-input", "");
     String text = getParameter(request, "text-input", "");
-    comments.add(text);
+    long timestamp = System.currentTimeMillis();
+    //comments.add(text);
+
+    // create new Entity with kind Task and set properties with keys and values
+    Entity taskEntity = new Entity("Task");
+    taskEntity.setProperty("name", name);
+    taskEntity.setProperty("text", text);
+    taskEntity.setProperty("timestamp", timestamp);
+
+    // create instance of DatastoreService class and store entity
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(taskEntity);
 
     // Respond with the result.
     response.setContentType("text/html;");
     response.getWriter().println(name + text);
+    response.sendRedirect("/comments.html");
   }
     /**
    * @return the request parameter, or the default value if the parameter
