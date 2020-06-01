@@ -26,7 +26,6 @@ function pickPastelColor() {
   const body = document.getElementById('body');
   body.style.background = pastel;
 }
-
 function getRandomQuoteUsingArrowFunctions() {
   fetch('/random-quote').then(response => response.text()).then((quote) => {
     document.getElementById('quote-container').innerText = quote;
@@ -37,3 +36,12 @@ function getRandomFactUsingArrowFunctions() {
     document.getElementById('fact-container').innerText = fact;
   });
 }
+/**
+ * Fetches stats from the servers and adds them to the DOM.
+ */
+function getServletData() {
+  fetch('/data').then(response => response.json()).then((fact) => {
+    document.getElementById('json-container').innerText = fact;
+  });
+}
+
