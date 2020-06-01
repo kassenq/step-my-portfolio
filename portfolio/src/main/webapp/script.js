@@ -13,16 +13,27 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Allow user to change background color to another pastel.
  */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+function pickPastelColor() {
+  const pastels =
+      ['#fac0e5', '#beebfa', '#fae5c0', '#ebc7ff', '#fff9c7', "#caf5e3", "#f7c3be", "#e2f7cb"];
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  // Pick a pastel color.
+  const pastel = pastels[Math.floor(Math.random() * pastels.length)];
 
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  // Make the background color change.
+  const body = document.getElementById('body');
+  body.style.background = pastel;
+}
+
+function getRandomQuoteUsingArrowFunctions() {
+  fetch('/random-quote').then(response => response.text()).then((quote) => {
+    document.getElementById('quote-container').innerText = quote;
+  });
+}
+function getRandomFactUsingArrowFunctions() {
+  fetch('/data').then(response => response.text()).then((fact) => {
+    document.getElementById('fact-container').innerText = fact;
+  });
 }
