@@ -43,17 +43,17 @@ function pickPastelColor() {
 // }
 
 function getCommentData() {
-  document.getElementById('fetch-data').innerHTML = "";
-  fetch('/data').then(response => response.json()).then((messages) => {
-    const taskListElement = document.getElementById('fetch-data');
-    messages.forEach((task) => {
-      taskListElement.appendChild(createListElement(task));
+  document.getElementById('fetch').innerHTML = "";
+  fetch('/data').then(response => response.json()).then((tasks) => {
+    const taskListElement = document.getElementById('fetch');
+    tasks.forEach((task) => {
+      taskListElement.appendChild(createListElement(task.name, task.text));
     })
   });
 }
-function createListElement(text) {
-  const liElement = document.createElement('h1');
-  liElement.innerText = text;
+function createListElement(name, text) {
+  const liElement = document.createElement('p');
+  liElement.innerText = name + ': ' + text;
   return liElement;
 }
 
