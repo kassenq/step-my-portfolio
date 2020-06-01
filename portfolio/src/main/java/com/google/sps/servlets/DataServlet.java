@@ -13,7 +13,7 @@
 // limitations under the License.
 
 package com.google.sps.servlets;
-// import com.google.sps.data.Task;
+import com.google.sps.data.Task;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -49,15 +49,15 @@ public class DataServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     // Loop over entities
-    List<String> comments = new ArrayList<String>();
+    List<Task> tasks = new ArrayList<>();
     for (Entity entity : results.asIterable()) {
-      long id = entity.getKey().getId();
+      // long id = entity.getKey().getId();
       String name = (String) entity.getProperty("name");
       String text = (String) entity.getProperty("text");
       long timestamp = (long) entity.getProperty("timestamp");
-      comments.add(text);
-      // String task = new Task(id, name, text, timestamp);
-      // tasks.add(task);
+      // comments.add(text);
+      Task task = new Task(name, text, timestamp);
+      tasks.add(task);
     }
   
     Gson gson = new Gson();

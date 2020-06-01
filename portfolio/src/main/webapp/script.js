@@ -26,22 +26,34 @@ function pickPastelColor() {
   const body = document.getElementById('body');
   body.style.background = pastel;
 }
-function getRandomQuoteUsingArrowFunctions() {
-  fetch('/random-quote').then(response => response.text()).then((quote) => {
-    document.getElementById('quote-container').innerText = quote;
+// function getRandomQuoteUsingArrowFunctions() {
+//   fetch('/random-quote').then(response => response.text()).then((quote) => {
+//     document.getElementById('quote-container').innerText = quote;
+//   });
+// }
+// function getRandomFactUsingArrowFunctions() {
+//   fetch('/data').then(response => response.text()).then((fact) => {
+//     document.getElementById('fact-container').innerText = fact;
+//   });
+// }
+// function getServletData() {
+//   fetch('/data').then(response => response.json()).then((fact) => {
+//     document.getElementById('json-container').innerText = fact;
+//   });
+// }
+
+function getCommentData() {
+  document.getElementById('fetch-data').innerHTML = "";
+  fetch('/data').then(response => response.json()).then((messages) => {
+    const taskListElement = document.getElementById('fetch-data');
+    messages.forEach((task) => {
+      taskListElement.appendChild(createListElement(task));
+    })
   });
 }
-function getRandomFactUsingArrowFunctions() {
-  fetch('/data').then(response => response.text()).then((fact) => {
-    document.getElementById('fact-container').innerText = fact;
-  });
-}
-/**
- * Fetches stats from the servers and adds them to the DOM.
- */
-function getServletData() {
-  fetch('/data').then(response => response.json()).then((fact) => {
-    document.getElementById('json-container').innerText = fact;
-  });
+function createListElement(text) {
+  const liElement = document.createElement('h1');
+  liElement.innerText = text;
+  return liElement;
 }
 
