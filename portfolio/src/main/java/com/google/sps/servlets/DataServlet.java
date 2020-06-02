@@ -30,11 +30,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/** Servlet that handles comment data. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
   
   private ArrayList<String> comments;
+  private static final Gson gson = new Gson();
 
   @Override
   public void init() {
@@ -48,19 +49,14 @@ public class DataServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
-    // Loop over entities
+    // Loop over entities.
     List<Task> tasks = new ArrayList<>();
     for (Entity entity : results.asIterable()) {
-      // long id = entity.getKey().getId();
       String name = (String) entity.getProperty("name");
       String text = (String) entity.getProperty("text");
       long timestamp = (long) entity.getProperty("timestamp");
-      // comments.add(text);
-      Task task = new Task(name, text, timestamp);
-      tasks.add(task);
+      tasks.add(new Task(name, text, timestamp));
     }
-  
-    Gson gson = new Gson();
 
     response.setContentType("application/json;");
     response.getWriter().println(gson.toJson(tasks));
@@ -71,26 +67,23 @@ public class DataServlet extends HttpServlet {
     String name = getParameter(request, "name-input", "");
     String text = getParameter(request, "text-input", "");
     long timestamp = System.currentTimeMillis();
-    //comments.add(text);
 
-    // create new Entity with kind Task and set properties with keys and values
+    // Create new Entity with kind Task and set properties with keys and values.
     Entity taskEntity = new Entity("Task");
     taskEntity.setProperty("name", name);
     taskEntity.setProperty("text", text);
     taskEntity.setProperty("timestamp", timestamp);
 
-    // create instance of DatastoreService class and store entity
+    // Create instance of DatastoreService class and store entity.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(taskEntity);
 
     // Respond with the result.
-    // response.setContentType("text/html;");
-    // response.getWriter().println(name + text);
     response.sendRedirect("/comments.html");
   }
     /**
    * @return the request parameter, or the default value if the parameter
-   *         was not specified by the client
+   *         was not specified by the client.
    */
   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);

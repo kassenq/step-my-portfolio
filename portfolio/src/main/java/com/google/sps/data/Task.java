@@ -14,6 +14,9 @@
 
 package com.google.sps.data;
 
+/*
+* Create custom Task class for comments.
+*/
 public final class Task {
 
   private final String name;
