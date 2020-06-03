@@ -29,7 +29,11 @@ function pickPastelColor() {
 
 function getCommentData() {
   document.getElementById('fetch').innerHTML = "";
-  fetch('/data').then(response => response.json()).then((tasks) => {
+  var num = document.getElementById("num");
+  num = num.options[num.selectedIndex].value;
+  var url = "/data?max=" + num; 
+
+  fetch(url).then(response => response.json()).then((tasks) => {
     const taskListElement = document.getElementById('fetch');
     tasks.forEach((task) => {
       taskListElement.appendChild(createListElement(task.name, task.text));
@@ -42,4 +46,5 @@ function createListElement(name, text) {
   liElement.innerText = name + ': ' + text;
   return liElement;
 }
+
 

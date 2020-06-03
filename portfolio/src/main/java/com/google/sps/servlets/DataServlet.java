@@ -21,9 +21,8 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.lang.Integer;
 import com.google.gson.Gson;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 public class DataServlet extends HttpServlet {
   
   private ArrayList<String> comments;
-  private static final Gson gson = new Gson();
+  private static final Gson GSON = new Gson();
 
   @Override
   public void init() {
@@ -48,18 +47,23 @@ public class DataServlet extends HttpServlet {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
+    // datastoreService.prepare(query).asList(FetchOptions.Builder.withLimit(10));
 
     // Loop over entities.
     List<Task> tasks = new ArrayList<>();
+    int max = Integer.parseInt(request.getParameter("max"));
+    int i = 0;
     for (Entity entity : results.asIterable()) {
       String name = (String) entity.getProperty("name");
       String text = (String) entity.getProperty("text");
       long timestamp = (long) entity.getProperty("timestamp");
       tasks.add(new Task(name, text, timestamp));
+      i += 1;
+      if (i == max) break;
     }
 
     response.setContentType("application/json;");
-    response.getWriter().println(gson.toJson(tasks));
+    response.getWriter().println(GSON.toJson(tasks));
   }
 
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -91,14 +95,5 @@ public class DataServlet extends HttpServlet {
       return defaultValue;
     }
     return value;
-  }
-  /**
-  * Converts a ServerStats instance into a JSON string using the Gson library. Note: We first added
-  * the Gson library dependency to pom.xml.
-  */
-  private String convertToJsonUsingGson(ArrayList<String> comments) {
-    Gson gson = new Gson();
-    String json = gson.toJson(comments);
-    return json;
   }
 }

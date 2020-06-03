@@ -22,7 +22,7 @@
             <a class="navbar-brand" href="#">Kassen's Portfolio</a>
           </div>
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
+            <li class="active"><a href="/index.html">Home</a></li>
             <li><a href="/projects.html">Projects</a></li>
             <li><a href="/involvement.html">Involvement</a></li>
             <li><a href="/comments.html">Comments</a></li>
@@ -46,7 +46,16 @@
         </form>
 
         <br><br>
-
+        <p>Pick the number of previous comments:</p>
+        <!-- <input type="number" name="max-num-comments" min="1" max="10" value="1"> -->
+        <select id="num">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <br><br>
         <button class="btn btn-default" onclick="getCommentData()">Load Previous Comments</button>
           <br>
         <ul id="fetch"></ul>
