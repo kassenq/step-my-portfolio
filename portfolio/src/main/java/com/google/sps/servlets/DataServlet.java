@@ -13,7 +13,7 @@
 // limitations under the License.
 
 package com.google.sps.servlets;
-import com.google.sps.data.Task;
+import com.google.sps.data.Comment;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -33,37 +33,30 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
   
-  private ArrayList<String> comments;
   private static final Gson GSON = new Gson();
 
   @Override
-  public void init() {
-    comments = new ArrayList<>();
-  }
-
-  @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Task");
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-    // datastoreService.prepare(query).asList(FetchOptions.Builder.withLimit(10));
 
     // Loop over entities.
-    List<Task> tasks = new ArrayList<>();
+    List<Comment> comments = new ArrayList<>();
     int max = Integer.parseInt(request.getParameter("max"));
-    int i = 0;
     for (Entity entity : results.asIterable()) {
       String name = (String) entity.getProperty("name");
       String text = (String) entity.getProperty("text");
       long timestamp = (long) entity.getProperty("timestamp");
-      tasks.add(new Task(name, text, timestamp));
-      i += 1;
-      if (i == max) break;
+      comments.add(new Comment(name, text, timestamp));
+      if (comments.size() == max) {
+        break;
+      }
     }
 
     response.setContentType("application/json;");
-    response.getWriter().println(GSON.toJson(tasks));
+    response.getWriter().println(GSON.toJson(comments));
   }
 
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -72,15 +65,15 @@ public class DataServlet extends HttpServlet {
     String text = getParameter(request, "text-input", "");
     long timestamp = System.currentTimeMillis();
 
-    // Create new Entity with kind Task and set properties with keys and values.
-    Entity taskEntity = new Entity("Task");
-    taskEntity.setProperty("name", name);
-    taskEntity.setProperty("text", text);
-    taskEntity.setProperty("timestamp", timestamp);
+    // Create new Entity with kind Comment and set properties with keys and values.
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("name", name);
+    commentEntity.setProperty("text", text);
+    commentEntity.setProperty("timestamp", timestamp);
 
     // Create instance of DatastoreService class and store entity.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(taskEntity);
+    datastore.put(commentEntity);
 
     // Respond with the result.
     response.sendRedirect("/comments.html");

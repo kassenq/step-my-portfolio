@@ -33,10 +33,10 @@ function getCommentData() {
   num = num.options[num.selectedIndex].value;
   var url = "/data?max=" + num; 
 
-  fetch(url).then(response => response.json()).then((tasks) => {
-    const taskListElement = document.getElementById('fetch');
-    tasks.forEach((task) => {
-      taskListElement.appendChild(createListElement(task.name, task.text));
+  fetch(url).then(response => response.json()).then((comments) => {
+    const commentListElement = document.getElementById('fetch');
+    comments.forEach((comment) => {
+      commentListElement.appendChild(createListElement(comment.name, comment.text));
     })
   });
 }
@@ -46,5 +46,11 @@ function createListElement(name, text) {
   liElement.innerText = name + ': ' + text;
   return liElement;
 }
+
+// function deleteCommentData() {
+//   const request = new Request('/delete-data', {method: 'POST'});
+//   fetch(request);
+//   getCommentData();
+// }
 
 
