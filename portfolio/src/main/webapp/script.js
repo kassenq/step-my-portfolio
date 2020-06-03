@@ -47,10 +47,10 @@ function createListElement(name, text) {
   return liElement;
 }
 
-// function deleteCommentData() {
-//   const request = new Request('/delete-data', {method: 'POST'});
-//   fetch(request);
-//   getCommentData();
-// }
+function deleteCommentData() {
+  const request = new Request('/delete-data', {method: 'POST'});
+  fetch(request);
+  getCommentData();
+}
 
 
