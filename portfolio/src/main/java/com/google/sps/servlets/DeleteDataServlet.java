@@ -13,13 +13,15 @@
 // limitations under the License.
 
 package com.google.sps.servlets;
-import com.google.sps.data.Task;
+import com.google.sps.data.Comment;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import java.io.IOException;
 import java.util.*;
 import java.lang.Integer;
@@ -33,15 +35,15 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/delete-data")
 public class DeleteDataServlet extends HttpServlet {
 
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Task").addSort("timestamp", SortDirection.DESCENDING);
-    DatastoreService datastore = DatastoreServiceFactory.getDataStoreService();
-    PreparedQuery results = datastore.prepare(query);
+  // @Override
+  // public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  //   Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+  //   DatastoreService datastore = DatastoreServiceFactory.getDataStoreService();
+  //   PreparedQuery results = datastore.prepare(query);
 
-    for (Entity entity : results.asIterable()) {
-      Key taskEntityKey = entity.getKey();
-      datastore.delete(taskEntityKey);
-    }
-  }
+  //   for (Entity entity : results.asIterable()) {
+  //     Key commentEntityKey = entity.getKey();
+  //     datastore.delete(commentEntityKey);
+  //   }
+  // }
 }

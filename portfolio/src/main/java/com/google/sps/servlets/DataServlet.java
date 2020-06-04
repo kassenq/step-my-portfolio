@@ -37,17 +37,22 @@ public class DataServlet extends HttpServlet {
   static final String NAME = "name";
   static final String TEXT = "text";
   static final String TIMESTAMP = "timestamp";
+  static final String NAME_INPUT = "name-input";
+  static final String TEXT_INPUT = "text-input";
+  static final String EMPTY_STRING = "";
+  static final String COMMENT_KIND = "Comment";
+  static final String MAX = "max";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Comment").addSort(TIMESTAMP, SortDirection.DESCENDING);
+    Query query = new Query(COMMENT_KIND).addSort(TIMESTAMP, SortDirection.DESCENDING);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
     // Loop over entities.
     List<Comment> comments = new ArrayList<>();
-    int max = Integer.parseInt(request.getParameter("max"));
+    int max = Integer.parseInt(request.getParameter(MAX));
     for (Entity entity : results.asIterable()) {
       String name = (String) entity.getProperty(NAME);
       String text = (String) entity.getProperty(TEXT);
@@ -65,12 +70,12 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
-    String name = getParameter(request, "name-input", "");
-    String text = getParameter(request, "text-input", "");
+    String name = getParameter(request, NAME_INPUT, EMPTY_STRING);
+    String text = getParameter(request, TEXT_INPUT, EMPTY_STRING);
     long timestamp = System.currentTimeMillis();
 
     // Create new Entity with kind Comment and set properties with keys and values.
-    Entity commentEntity = new Entity("Comment");
+    Entity commentEntity = new Entity(COMMENT_KIND);
     commentEntity.setProperty(NAME, name);
     commentEntity.setProperty(TEXT, text);
     commentEntity.setProperty(TIMESTAMP, timestamp);
