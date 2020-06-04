@@ -13,17 +13,17 @@
 // limitations under the License.
 
 package com.google.sps.servlets;
-import com.google.sps.data.Comment;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import java.io.IOException;
-import java.util.*;
-import java.lang.Integer;
 import com.google.gson.Gson;
+import com.google.sps.data.Comment;
+import java.io.IOException;
+import java.lang.Integer;
+import java.util.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that handles comment data. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-  
   static final Gson GSON = new Gson();
   static final String NAME = "name";
   static final String TEXT = "text";
@@ -87,7 +86,7 @@ public class DataServlet extends HttpServlet {
     // Respond with the result.
     response.sendRedirect("/comments.html");
   }
-    /**
+  /**
    * @return the request parameter, or the default value if the parameter
    *         was not specified by the client.
    */

@@ -15,10 +15,9 @@
 package com.google.sps.data;
 
 /*
-* Create custom Comment class for comments.
-*/
+ * Create custom Comment class for comments.
+ */
 public final class Comment {
-
   private final String name;
   private final String text;
   private final long timestamp;

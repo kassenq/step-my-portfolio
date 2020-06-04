@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-  <html>
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Kassen's Portfolio</title>
-      <!-- CSS -->
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-      <link rel="stylesheet" href="/style.css">
-      <!-- jQuery library -->
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-      <!-- JavaScript -->
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-      <script src="script.js"></script>
-    </head>
-    <body id="body">
-      <div id="content">
-        <nav class="navbar navbar-default">
-          <div class="container-fluid">
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kassen's Portfolio</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/style.css" />
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+  </head>
+  <body id="body">
+    <div id="content">
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
           <div class="navbar-header">
             <a class="navbar-brand" href="#">Kassen's Portfolio</a>
           </div>
@@ -27,41 +27,39 @@
             <li><a href="/involvement.html">Involvement</a></li>
             <li><a href="/comments.html">Comments</a></li>
           </ul>
-          </div>
-        </nav>
+        </div>
+      </nav>
 
-        <h1>Leave a Comment</h1>
+      <h1>Leave a Comment</h1>
 
-        <form action="/data" method="POST">
-          <p>First Name:</p>
-          <input type="text" name="name-input">
-          <br><br>
-          <p>Enter a comment:</p>
-          <textarea name="text-input"></textarea>
-          <br/><br/>
-          <p>Alphabetize all the words in your comment if you want:</p>
-          <input type="checkbox" name="sort" value="true"> Alphabetize
-          <br/><br/>
-          <input type="submit" />
-        </form>
+      <form action="/data" method="post">
+        <p>First Name:</p>
+        <input type="text" name="name-input" />
+        <br /><br />
+        <p>Enter a comment:</p>
+        <textarea name="text-input"></textarea>
+        <br /><br />
+        <p>Alphabetize all the words in your comment if you want:</p>
+        <input type="checkbox" name="sort" value="true" /> Alphabetize <br /><br />
+        <button class="btn btn-default" type="submit">Submit</button>
+      </form>
 
-        <br><br>
-        <p>Pick the number of previous comments:</p>
-        <!-- <input type="number" name="max-num-comments" min="1" max="10" value="1"> -->
-        <select id="num">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>
-        <br><br>
-        <button class="btn btn-default" onclick="getCommentData()">Load Previous Comments</button>
-        <br>
-        <ul id="fetch"></ul>
-        <button class="btn btn-default" onclick="deleteCommentData()">Delete Previous Comments</button>
-        <br>
-
-      </div>
-    </body>
-  </html>
+      <br /><br />
+      <p>Pick the number of previous comments:</p>
+      <!-- <input type="number" name="max-num-comments" min="1" max="10" value="1"> -->
+      <select id="num">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+      <br /><br />
+      <button class="btn btn-default" onclick="getCommentData()" type="button">Load Previous Comments</button>
+      <br />
+      <ul id="fetch"></ul>
+      <button class="btn btn-default" onclick="deleteCommentData()" type="button">Delete Previous Comments</button>
+      <br />
+    </div>
+  </body>
+</html>

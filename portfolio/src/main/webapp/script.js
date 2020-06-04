@@ -21,8 +21,10 @@ const BODY_ID = 'body';
  * Allow user to change background color to another pastel.
  */
 function pickPastelColor() {
-  const pastels =
-      ['#fac0e5', '#beebfa', '#fae5c0', '#ebc7ff', '#fff9c7', "#caf5e3", "#f7c3be", "#e2f7cb"];
+  const pastels = [
+    '#fac0e5', '#beebfa', '#fae5c0', '#ebc7ff', '#fff9c7', '#caf5e3', '#f7c3be',
+    '#e2f7cb'
+  ];
 
   // Pick a pastel color.
   const pastel = pastels[Math.floor(Math.random() * pastels.length)];
@@ -33,18 +35,20 @@ function pickPastelColor() {
 }
 
 /**
- * Get # of comments user would like to display and adds each comment as a list entry.
+ * Get # of comments user would like to display and adds each comment as a list
+ * entry.
  */
 function getCommentData() {
-  document.getElementById(FETCH_ID).innerHTML = "";
-  var num = document.getElementById("num");
+  document.getElementById(FETCH_ID).innerHTML = '';
+  var num = document.getElementById('num');
   num = num.options[num.selectedIndex].value;
-  var url = "/data?max=" + num; 
+  var url = '/data?max=' + num;
 
   fetch(url).then(response => response.json()).then((comments) => {
     const commentListElement = document.getElementById(FETCH_ID);
     comments.forEach((comment) => {
-      commentListElement.appendChild(createListElement(comment.name, comment.text));
+      commentListElement.appendChild(
+          createListElement(comment.name, comment.text));
     })
   });
 }
@@ -63,7 +67,5 @@ function createListElement(name, text) {
  */
 function deleteCommentData() {
   const request = new Request('/delete-data', {method: POST});
-  fetch(request)
-  .then(result => getCommentData());
+  fetch(request).then(result => getCommentData());
 }
-
