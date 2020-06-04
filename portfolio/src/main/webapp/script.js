@@ -27,13 +27,25 @@ function pickPastelColor() {
   body.style.background = pastel;
 }
 
-function getRandomQuoteUsingArrowFunctions() {
-  fetch('/random-quote').then(response => response.text()).then((quote) => {
-    document.getElementById('quote-container').innerText = quote;
+function getCommentData() {
+  document.getElementById('fetch').innerHTML = "";
+  var num = document.getElementById("num");
+  num = num.options[num.selectedIndex].value;
+  var url = "/data?max=" + num; 
+
+  fetch(url).then(response => response.json()).then((comments) => {
+    const commentListElement = document.getElementById('fetch');
+    comments.forEach((comment) => {
+      commentListElement.appendChild(createListElement(comment.name, comment.text));
+    })
   });
 }
-function getRandomFactUsingArrowFunctions() {
-  fetch('/data').then(response => response.text()).then((fact) => {
-    document.getElementById('fact-container').innerText = fact;
-  });
+
+function createListElement(name, text) {
+  const liElement = document.createElement('p');
+  liElement.innerText = name + ': ' + text;
+  return liElement;
 }
+
+
+

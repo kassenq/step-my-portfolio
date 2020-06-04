@@ -13,42 +13,84 @@
 // limitations under the License.
 
 package com.google.sps.servlets;
-
+import com.google.sps.data.Comment;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.lang.Integer;
+import com.google.gson.Gson;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/** Servlet that handles comment data. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
   
-  private List<String> facts;
-
-  @Override
-  public void init() {
-    facts = new ArrayList<>();
-    facts.add(
-        "My favorite color is green. "
-            + "I also like light blue.");
-    facts.add("My parents made up my name based on my Chinese one.");
-    facts.add("My birthday is on Halloween.");
-    facts.add("I have the best younger brother!");
-    facts.add("My favorite food is pasta.");
-    facts.add("I'm a cat person. I like dogs, but I like cats more.");
-    facts.add(
-        "I didn't have any experience with "
-            + "computer science in high school.");
-    facts.add("I play the acoustic guitar.");
-  }
+  static final Gson GSON = new Gson();
+  static final String NAME = "name";
+  static final String TEXT = "text";
+  static final String TIMESTAMP = "timestamp";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String fact = facts.get((int) (Math.random() * facts.size()));
-    response.setContentType("text/html;");
-    response.getWriter().println(fact);
+    Query query = new Query("Comment").addSort(TIMESTAMP, SortDirection.DESCENDING);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    // Loop over entities.
+    List<Comment> comments = new ArrayList<>();
+    int max = Integer.parseInt(request.getParameter("max"));
+    for (Entity entity : results.asIterable()) {
+      String name = (String) entity.getProperty(NAME);
+      String text = (String) entity.getProperty(TEXT);
+      long timestamp = (long) entity.getProperty(TIMESTAMP);
+      comments.add(new Comment(name, text, timestamp));
+      if (comments.size() == max) {
+        break;
+      }
+    }
+
+    response.setContentType("application/json;");
+    response.getWriter().println(GSON.toJson(comments));
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Get the input from the form.
+    String name = getParameter(request, "name-input", "");
+    String text = getParameter(request, "text-input", "");
+    long timestamp = System.currentTimeMillis();
+
+    // Create new Entity with kind Comment and set properties with keys and values.
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty(NAME, name);
+    commentEntity.setProperty(TEXT, text);
+    commentEntity.setProperty(TIMESTAMP, timestamp);
+
+    // Create instance of DatastoreService class and store entity.
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(commentEntity);
+
+    // Respond with the result.
+    response.sendRedirect("/comments.html");
+  }
+    /**
+   * @return the request parameter, or the default value if the parameter
+   *         was not specified by the client.
+   */
+  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+    String value = request.getParameter(name);
+    if (value == null) {
+      return defaultValue;
+    }
+    return value;
   }
 }
