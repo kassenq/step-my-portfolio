@@ -35,15 +35,25 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/delete-data")
 public class DeleteDataServlet extends HttpServlet {
 
-  // @Override
-  // public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-  //   Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
-  //   DatastoreService datastore = DatastoreServiceFactory.getDataStoreService();
-  //   PreparedQuery results = datastore.prepare(query);
+  static final Gson GSON = new Gson();
+  static final String NAME = "name";
+  static final String TEXT = "text";
+  static final String TIMESTAMP = "timestamp";
+  static final String NAME_INPUT = "name-input";
+  static final String TEXT_INPUT = "text-input";
+  static final String EMPTY_STRING = "";
+  static final String COMMENT_KIND = "Comment";
+  static final String MAX = "max";
 
-  //   for (Entity entity : results.asIterable()) {
-  //     Key commentEntityKey = entity.getKey();
-  //     datastore.delete(commentEntityKey);
-  //   }
-  // }
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Query query = new Query(COMMENT_KIND).addSort(TIMESTAMP, SortDirection.DESCENDING);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      Key commentEntityKey = entity.getKey();
+      datastore.delete(commentEntityKey);
+    }
+  }
 }
