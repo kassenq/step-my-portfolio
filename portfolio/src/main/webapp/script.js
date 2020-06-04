@@ -49,10 +49,6 @@ function createListElement(name, text) {
 
 function deleteCommentData() {
   const request = new Request('/delete-data', {method: 'POST'});
-  // fetch(request).then(getCommentData());
-  // fetch(request).then(function(result) {
-  //   return getCommentData();
-  // })
   fetch(request)
   .then(result => getCommentData());
 }
