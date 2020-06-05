@@ -1,11 +1,13 @@
-@import url("https://fonts.googleapis.com/css2?family=Noticia+Text&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Noticia+Text&display=swap');
 body {
   font-family: 'Noticia Text', serif;
   font-weight: 400;
   background-color: #caf5e3;
   text-align: center;
 }
-h2, p, a {
+h2,
+p,
+a {
   font-family: 'Noticia Text', serif;
   font-weight: 400;
 }
@@ -13,7 +15,9 @@ img {
   height: 400px;
   width: auto;
 }
-a:link, a:visited, a:active {
+a:link,
+a:visited,
+a:active {
   color: rgb(211, 161, 161);
 }
 a:hover {

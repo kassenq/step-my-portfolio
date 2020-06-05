@@ -13,48 +13,40 @@
 // limitations under the License.
 
 package com.google.sps.servlets;
-
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
-import com.google.sps.data.Task;
+import com.google.sps.data.Comment;
+import com.google.sps.data.Keys;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.lang.Integer;
 import java.util.List;
+import java.util.ArrayList;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet responsible for listing tasks. */
-@WebServlet("/list-tasks")
-public class ListTasksServlet extends HttpServlet {
-
+/** Servlet that deletes comment data. */
+@WebServlet("/delete-data")
+public class DeleteDataServlet extends HttpServlet {
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Task").addSort("timestamp", SortDirection.DESCENDING);
-
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Query query = new Query(Keys.COMMENT_KIND).addSort(Keys.TIMESTAMP, SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
-    // Loop over entities
-    List<Task> tasks = new ArrayList<>();
+    List<Key> keys = new ArrayList<Key>();
     for (Entity entity : results.asIterable()) {
-      long id = entity.getKey().getId();
-      String title = (String) entity.getProperty("title");
-      long timestamp = (long) entity.getProperty("timestamp");
-
-      Task task = new Task(id, title, timestamp);
-      tasks.add(task);
+      Key commentEntityKey = entity.getKey();
+      keys.add(commentEntityKey);
     }
-
-    Gson gson = new Gson();
-
-    response.setContentType("application/json;");
-    response.getWriter().println(gson.toJson(tasks));
+    datastore.delete(keys);
   }
 }

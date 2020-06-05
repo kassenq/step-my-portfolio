@@ -15,16 +15,15 @@
 package com.google.sps.data;
 
 /*
- * Create custom Comment class for comments.
+ * Store Keys used in servlets.
  */
-public final class Comment {
-  private final String name;
-  private final String text;
-  private final long timestamp;
-
-  public Comment(String name, String text, long timestamp) {
-    this.name = name;
-    this.text = text;
-    this.timestamp = timestamp;
-  }
+public final class Keys {
+  public static final String NAME = "name";
+  public static final String TEXT = "text";
+  public static final String TIMESTAMP = "timestamp";
+  public static final String NAME_INPUT = "name-input";
+  public static final String TEXT_INPUT = "text-input";
+  public static final String EMPTY_STRING = "";
+  public static final String COMMENT_KIND = "Comment";
+  public static final String MAX = "max";
 }

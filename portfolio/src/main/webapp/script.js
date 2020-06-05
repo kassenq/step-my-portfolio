@@ -12,40 +12,60 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+const COMMENT_CHILD_TAG = 'p';
+const POST = 'POST';
+const FETCH_ID = 'fetch';
+const BODY_ID = 'body';
+
 /**
  * Allow user to change background color to another pastel.
  */
 function pickPastelColor() {
-  const pastels =
-      ['#fac0e5', '#beebfa', '#fae5c0', '#ebc7ff', '#fff9c7', "#caf5e3", "#f7c3be", "#e2f7cb"];
+  const pastels = [
+    '#fac0e5', '#beebfa', '#fae5c0', '#ebc7ff', '#fff9c7', '#caf5e3', '#f7c3be',
+    '#e2f7cb'
+  ];
 
   // Pick a pastel color.
   const pastel = pastels[Math.floor(Math.random() * pastels.length)];
 
   // Make the background color change.
-  const body = document.getElementById('body');
+  const body = document.getElementById(BODY_ID);
   body.style.background = pastel;
 }
 
+/**
+ * Get # of comments user would like to display and adds each comment as a list
+ * entry.
+ */
 function getCommentData() {
-  document.getElementById('fetch').innerHTML = "";
-  var num = document.getElementById("num");
+  document.getElementById(FETCH_ID).innerHTML = '';
+  var num = document.getElementById('num');
   num = num.options[num.selectedIndex].value;
-  var url = "/data?max=" + num; 
+  var url = '/data?max=' + num;
 
   fetch(url).then(response => response.json()).then((comments) => {
-    const commentListElement = document.getElementById('fetch');
+    const commentListElement = document.getElementById(FETCH_ID);
     comments.forEach((comment) => {
-      commentListElement.appendChild(createListElement(comment.name, comment.text));
+      commentListElement.appendChild(
+          createListElement(comment.name, comment.text));
     })
   });
 }
 
+/**
+ * Create a list element for comments to be formatted when displayed.
+ */
 function createListElement(name, text) {
-  const liElement = document.createElement('p');
+  const liElement = document.createElement(COMMENT_CHILD_TAG);
   liElement.innerText = name + ': ' + text;
   return liElement;
 }
 
-
-
+/**
+ * Creates POST request to delete existing comments.
+ */
+function deleteCommentData() {
+  const request = new Request('/delete-data', {method: POST});
+  fetch(request).then(result => getCommentData());
+}
