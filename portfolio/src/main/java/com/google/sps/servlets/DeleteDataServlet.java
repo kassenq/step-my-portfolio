@@ -35,7 +35,6 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that deletes comment data. */
 @WebServlet("/delete-data")
 public class DeleteDataServlet extends HttpServlet {
-
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query(Keys.COMMENT_KIND).addSort(Keys.TIMESTAMP, SortDirection.DESCENDING);

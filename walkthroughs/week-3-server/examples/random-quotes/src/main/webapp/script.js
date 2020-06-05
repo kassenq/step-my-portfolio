@@ -61,6 +61,12 @@ function getRandomQuoteUsingArrowFunctions() {
   });
 }
 
+function getPortfolioDataUsingArrowFunctions() {
+  fetch('/data').then(response => response.text()).then((quote) => {
+    document.getElementById('quote-container').innerText = quote;
+  });
+}
+
 /**
  * Another way to use fetch is by using the async and await keywords. This
  * allows you to use the return values directly instead of going through
