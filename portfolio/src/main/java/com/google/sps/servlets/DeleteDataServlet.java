@@ -38,7 +38,7 @@ public class DeleteDataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query(COMMENT_KIND).addSort(TIMESTAMP, SortDirection.DESCENDING);
+    Query query = new Query(Keys.COMMENT_KIND).addSort(Keys.TIMESTAMP, SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 

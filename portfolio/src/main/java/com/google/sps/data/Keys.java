@@ -13,18 +13,19 @@
 // limitations under the License.
 
 package com.google.sps.data;
+import com.google.gson.Gson;
 
 /*
  * Store Keys used in servlets.
  */
 public final class Keys {
-  static final Gson GSON = new Gson();
-  static final String NAME = "name";
-  static final String TEXT = "text";
-  static final String TIMESTAMP = "timestamp";
-  static final String NAME_INPUT = "name-input";
-  static final String TEXT_INPUT = "text-input";
-  static final String EMPTY_STRING = "";
-  static final String COMMENT_KIND = "Comment";
-  static final String MAX = "max
+  public static final Gson GSON = new Gson();
+  public static final String NAME = "name";
+  public static final String TEXT = "text";
+  public static final String TIMESTAMP = "timestamp";
+  public static final String NAME_INPUT = "name-input";
+  public static final String TEXT_INPUT = "text-input";
+  public static final String EMPTY_STRING = "";
+  public static final String COMMENT_KIND = "Comment";
+  public static final String MAX = "max";
 }

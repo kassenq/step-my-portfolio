@@ -36,18 +36,18 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query(COMMENT_KIND).addSort(TIMESTAMP, SortDirection.DESCENDING);
+    Query query = new Query(Keys.COMMENT_KIND).addSort(Keys.TIMESTAMP, SortDirection.DESCENDING);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
     // Loop over entities.
     List<Comment> comments = new ArrayList<>();
-    int max = Integer.parseInt(request.getParameter(MAX));
+    int max = Integer.parseInt(request.getParameter(Keys.MAX));
     for (Entity entity : results.asIterable()) {
-      String name = (String) entity.getProperty(NAME);
-      String text = (String) entity.getProperty(TEXT);
-      long timestamp = (long) entity.getProperty(TIMESTAMP);
+      String name = (String) entity.getProperty(Keys.NAME);
+      String text = (String) entity.getProperty(Keys.TEXT);
+      long timestamp = (long) entity.getProperty(Keys.TIMESTAMP);
       comments.add(new Comment(name, text, timestamp));
       if (comments.size() == max) {
         break;
@@ -55,21 +55,21 @@ public class DataServlet extends HttpServlet {
     }
 
     response.setContentType("application/json;");
-    response.getWriter().println(GSON.toJson(comments));
+    response.getWriter().println(Keys.GSON.toJson(comments));
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
-    String name = getParameter(request, NAME_INPUT, EMPTY_STRING);
-    String text = getParameter(request, TEXT_INPUT, EMPTY_STRING);
+    String name = getParameter(request, Keys.NAME_INPUT, Keys.EMPTY_STRING);
+    String text = getParameter(request, Keys.TEXT_INPUT, Keys.EMPTY_STRING);
     long timestamp = System.currentTimeMillis();
 
     // Create new Entity with kind Comment and set properties with keys and values.
-    Entity commentEntity = new Entity(COMMENT_KIND);
-    commentEntity.setProperty(NAME, name);
-    commentEntity.setProperty(TEXT, text);
-    commentEntity.setProperty(TIMESTAMP, timestamp);
+    Entity commentEntity = new Entity(Keys.COMMENT_KIND);
+    commentEntity.setProperty(Keys.NAME, name);
+    commentEntity.setProperty(Keys.TEXT, text);
+    commentEntity.setProperty(Keys.TIMESTAMP, timestamp);
 
     // Create instance of DatastoreService class and store entity.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
