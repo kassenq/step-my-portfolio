@@ -21,6 +21,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
+import com.google.sps.data.Keys;
 import java.io.IOException;
 import java.lang.Integer;
 import java.util.*;
@@ -32,15 +33,6 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that handles comment data. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-  static final Gson GSON = new Gson();
-  static final String NAME = "name";
-  static final String TEXT = "text";
-  static final String TIMESTAMP = "timestamp";
-  static final String NAME_INPUT = "name-input";
-  static final String TEXT_INPUT = "text-input";
-  static final String EMPTY_STRING = "";
-  static final String COMMENT_KIND = "Comment";
-  static final String MAX = "max";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
