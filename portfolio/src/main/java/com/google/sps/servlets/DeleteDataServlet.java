@@ -26,7 +26,8 @@ import com.google.sps.data.Comment;
 import com.google.sps.data.Keys;
 import java.io.IOException;
 import java.lang.Integer;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,9 +42,11 @@ public class DeleteDataServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
+    List<Key> keys = new ArrayList<Key>();
     for (Entity entity : results.asIterable()) {
       Key commentEntityKey = entity.getKey();
-      datastore.delete(commentEntityKey);
+      keys.add(commentEntityKey);
     }
+    datastore.delete(keys);
   }
 }
