@@ -16,7 +16,10 @@ package com.google.sps.servlets;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gson.Gson;
+import com.google.sps.data.UserStatus;
 import java.io.IOException;
+import java.util.HashMap;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,9 +27,12 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
+  public static final Gson GSON = new Gson();
+
+  // public static final HashMap<Boolean, String> loginInfo = new HashMap<Boolean, String>();
 
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("text/html");
 
     UserService userService = UserServiceFactory.getUserService();
@@ -35,14 +41,20 @@ public class LoginServlet extends HttpServlet {
       String urlToRedirectToAfterUserLogsOut = "/";
       String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
 
-      response.getWriter().println("<p>Hello " + userEmail + "!</p>");
-      response.getWriter().println("<p>Logout <a href=\"" + logoutUrl + "\">here</a>.</p>");
+      String loginMessage = "Hello! Logout <a href=\"" + logoutUrl + "\">here</a>.";
+      Boolean isLoggedIn = userService.isUserLoggedIn();
+      UserStatus userStatus = new UserStatus(isLoggedIn, loginMessage);
+      response.setContentType("application/json");
+      response.getWriter().println(GSON.toJson(userStatus));
     } else {
       String urlToRedirectToAfterUserLogsIn = "/comments.html";
       String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
 
-      response.getWriter().println("<p>Hello stranger.</p>");
-      response.getWriter().println("<p>Login <a href=\"" + loginUrl + "\">here</a>.</p>");
+      String loginMessage = "Hello! Login <a href=\"" + loginUrl + "\">here</a>.";
+      Boolean isLoggedIn = userService.isUserLoggedIn();
+      UserStatus userStatus = new UserStatus(isLoggedIn, loginMessage);
+      response.setContentType("application/json");
+      response.getWriter().println(GSON.toJson(userStatus));
     }
   }
 }

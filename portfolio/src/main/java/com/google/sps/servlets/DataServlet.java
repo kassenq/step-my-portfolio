@@ -24,8 +24,8 @@ import com.google.sps.data.Comment;
 import com.google.sps.data.Keys;
 import java.io.IOException;
 import java.lang.Integer;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +34,6 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that handles comment data. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-
   public static final Gson GSON = new Gson();
 
   @Override

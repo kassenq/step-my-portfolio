@@ -14,7 +14,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
   </head>
-  <body id="body">
+  <body id="body" onload="getLoginStatus()">
     <div id="content">
       <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -33,25 +33,30 @@
       <h1>Leave a Comment</h1>
       <br /><br />
 
-      <form action="/login" method="post">
+      <div id="handle-login"></div>
+
+      <!-- <form action="/login" method="post" id="login-form">
         <p>Log in:</p>
         <br />
         <input type="text" name="login-input" />
         <br /><br />
-        <button class="btn btn-default" type="submit">Submit</button>
-      </form>
+      </form> -->
+      <!-- <a href="" id="login-link" class="btn btn-default">Log In</a> -->
+      <!-- <button type="button" onclick="getLoginStatus()" id="login-link" class="btn btn-default">Log In</button> -->
 
-      <form action="/data" method="post">
-        <p>First Name:</p>
-        <input type="text" name="name-input" />
-        <br /><br />
-        <p>Enter a comment:</p>
-        <textarea name="text-input"></textarea>
-        <br /><br />
-        <p>Alphabetize all the words in your comment if you want:</p>
-        <input type="checkbox" name="sort" value="true" /> Alphabetize <br /><br />
-        <button class="btn btn-default" type="submit">Submit</button>
-      </form>
+      <div id="comments-form-div">
+        <form action="/data" method="post" id="comments-form">
+          <p>First Name:</p>
+          <input type="text" name="name-input" />
+          <br /><br />
+          <p>Enter a comment:</p>
+          <textarea name="text-input"></textarea>
+          <br /><br />
+          <p>Alphabetize all the words in your comment if you want:</p>
+          <input type="checkbox" name="sort" value="true" /> Alphabetize <br /><br />
+          <button class="btn btn-default" type="submit">Submit</button>
+        </form>
+      <div>
 
       <br /><br />
       <p>Pick the number of previous comments:</p>

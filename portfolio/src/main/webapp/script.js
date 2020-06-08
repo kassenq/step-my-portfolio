@@ -44,13 +44,17 @@ function getCommentData() {
   num = num.options[num.selectedIndex].value;
   var url = '/data?max=' + num;
 
-  fetch(url).then(response => response.json()).then((comments) => {
-    const commentListElement = document.getElementById(FETCH_ID);
-    comments.forEach((comment) => {
-      commentListElement.appendChild(
-          createListElement(comment.name, comment.text));
-    })
-  });
+        fetch(url).then(response => response.json()).then((comments) => {
+        const commentListElement = document.getElementById(FETCH_ID);
+        comments.forEach((comment) => {
+          commentListElement.appendChild(
+              createListElement(comment.name, comment.text));
+        })
+      });
+
+  // fetch('/login').then((response) => response.json()).then((userStatus) => {
+
+  // });
 }
 
 /**
@@ -67,5 +71,29 @@ function createListElement(name, text) {
  */
 function deleteCommentData() {
   const request = new Request('/delete-data', {method: POST});
-  fetch(request).then(result => getCommentData());
+  fetch(request).then(response => getCommentData());
+}
+
+/**
+ * Fetch user login status from LoginServlet.
+ */
+function getLoginStatus() {
+  fetch('/login').then(response => response.json()).then((userStatus) => {
+    if (userStatus.isLoggedIn) {
+      // document.getElementById('login-form').style.display = 'none';
+      document.getElementById('comments-form-div').style.display = 'show';
+      document.getElementById('handle-login').innerHTML = userStatus.loginMessage;
+      // document.getElementById('login-link').innerText = 'Log Out';
+
+      // const messageElement = document.createElement(COMMENT_CHILD_TAG);
+      // messageElement.innerText = userStatus.loginMessage;
+    } else {
+      // document.getElementById('login-form').style.display = 'show';
+      document.getElementById('comments-form-div').style.display = 'none';
+      const messageElement = document.createElement(COMMENT_CHILD_TAG);
+      messageElement.innerText = userStatus.loginMessage;
+      document.getElementById('handle-login').innerHTML = messageElement.innerText;
+      // document.getElementById('login-link').innerText = 'Log In';
+    }
+  });
 }
