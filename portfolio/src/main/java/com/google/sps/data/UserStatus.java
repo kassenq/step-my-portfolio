@@ -18,15 +18,11 @@ package com.google.sps.data;
  * Create custom User class for login info.
  */
 public final class UserStatus {
-  public Boolean isLoggedIn;
+  public boolean isLoggedIn;
   public String loginMessage;
-  // public String loginUrl;
-  // public String logoutUrl;
 
-  public UserStatus(Boolean isLoggedIn, String loginMessage) {
+  public UserStatus(boolean isLoggedIn, String loginMessage) {
     this.isLoggedIn = isLoggedIn;
     this.loginMessage = loginMessage;
-    // this.loginUrl = loginUrl;
-    // this.logoutUrl = logoutUrl;
   }
 }

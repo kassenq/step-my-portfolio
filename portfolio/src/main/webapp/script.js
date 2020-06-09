@@ -51,10 +51,6 @@ function getCommentData() {
           createListElement(comment.email, comment.text));
     })
   });
-
-  // fetch('/login').then((response) => response.json()).then((userStatus) => {
-
-  // });
 }
 
 /**
@@ -85,6 +81,7 @@ function getLoginStatus() {
           userStatus.loginMessage;
     } else {
       document.getElementById('comments-form-div').style.display = 'none';
+      document.getElementById('delete-button-id').style.display = 'none';
       const messageElement = document.createElement(COMMENT_CHILD_TAG);
       messageElement.innerText = userStatus.loginMessage;
       document.getElementById('handle-login').innerHTML =
