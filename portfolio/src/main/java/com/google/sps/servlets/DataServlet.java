@@ -19,6 +19,8 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
 import com.google.sps.data.Keys;
@@ -42,6 +44,7 @@ public class DataServlet extends HttpServlet {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
+    UserService userService = UserServiceFactory.getUserService();
 
     // Loop over entities.
     List<Comment> comments = new ArrayList<>();
@@ -50,14 +53,22 @@ public class DataServlet extends HttpServlet {
       String name = (String) entity.getProperty(Keys.NAME);
       String text = (String) entity.getProperty(Keys.TEXT);
       long timestamp = (long) entity.getProperty(Keys.TIMESTAMP);
-      comments.add(new Comment(name, text, timestamp));
+      String email = (String) entity.getProperty(Keys.EMAIL);
+      comments.add(new Comment(name, text, timestamp, email));
       if (comments.size() == max) {
         break;
       }
     }
-
     response.setContentType("application/json;");
-    response.getWriter().println(GSON.toJson(comments));
+    if (userService.isUserLoggedIn()) {
+      response.getWriter().println(GSON.toJson(comments));
+    } else {
+      String urlToRedirectToAfterUserLogsIn = "/comments.html";
+      String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
+      String loginMessage = "<p>You must be logged in to view comments.</p>"
+          + "<p>Login <a href=\"" + loginUrl + "\">here</a>.</p>";
+      response.getWriter().println(GSON.toJson(loginMessage));
+    }
   }
 
   @Override
@@ -66,12 +77,15 @@ public class DataServlet extends HttpServlet {
     String name = getParameter(request, Keys.NAME_INPUT, Keys.EMPTY_STRING);
     String text = getParameter(request, Keys.TEXT_INPUT, Keys.EMPTY_STRING);
     long timestamp = System.currentTimeMillis();
+    UserService userService = UserServiceFactory.getUserService();
+    String email = userService.getCurrentUser().getEmail();
 
     // Create new Entity with kind Comment and set properties with keys and values.
     Entity commentEntity = new Entity(Keys.COMMENT_KIND);
     commentEntity.setProperty(Keys.NAME, name);
     commentEntity.setProperty(Keys.TEXT, text);
     commentEntity.setProperty(Keys.TIMESTAMP, timestamp);
+    commentEntity.setProperty(Keys.EMAIL, email);
 
     // Create instance of DatastoreService class and store entity.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

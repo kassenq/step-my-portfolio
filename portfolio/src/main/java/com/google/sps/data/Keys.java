@@ -21,6 +21,7 @@ public final class Keys {
   public static final String NAME = "name";
   public static final String TEXT = "text";
   public static final String TIMESTAMP = "timestamp";
+  public static final String EMAIL = "email";
   public static final String NAME_INPUT = "name-input";
   public static final String TEXT_INPUT = "text-input";
   public static final String EMPTY_STRING = "";
