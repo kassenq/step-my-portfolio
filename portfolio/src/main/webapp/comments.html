@@ -14,7 +14,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
   </head>
-  <body id="body" onload="getLoginStatus()">
+  <body id="body" onload="initializePage()">
     <div id="content">
       <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -45,23 +45,16 @@
       <!-- <button type="button" onclick="getLoginStatus()" id="login-link" class="btn btn-default">Log In</button> -->
 
       <div id="comments-form-div">
-        <form action="/data" method="post" id="comments-form">
+        <form action="" method="post" id="comments-form" enctype="multipart/form-data">
           <p>First Name:</p>
           <input type="text" name="name-input" />
           <br /><br />
           <p>Enter a comment:</p>
           <textarea name="text-input"></textarea>
           <br /><br />
-          <div id="image-upload-div" style="text-align:center;">
-            <form id="my-form" action="/blobstore-upload-url" class="hidden" method="post" enctype="multipart/form-data">
-              <p>Upload an image:</p>
-              <input type="file" name="image" style="margin-left:45%;">
-              <button class="btn btn-default" type="button" onclick="fetchBlobstoreUrl()">Upload Image</button>
-            </form>
-          </div>
+          <p>Upload an image:</p>
+          <input type="file" name="image" style="margin-left:45%;">
           <br /><br />
-          <p>Alphabetize all the words in your comment if you want:</p>
-          <input type="checkbox" name="sort" value="true" /> Alphabetize <br /><br />
           <button class="btn btn-default" type="submit">Submit</button>
         </form>
       </div>

@@ -48,7 +48,7 @@ function getCommentData() {
     const commentListElement = document.getElementById(FETCH_ID);
     comments.forEach((comment) => {
       commentListElement.appendChild(
-          createListElement(comment.email, comment.text));
+          createListElement(comment.email, comment.text, comment.imageUrl));
     })
   });
 }
@@ -56,9 +56,11 @@ function getCommentData() {
 /**
  * Create a list element for comments to be formatted when displayed.
  */
-function createListElement(email, text) {
+function createListElement(email, text, imageUrl) {
   const liElement = document.createElement(COMMENT_CHILD_TAG);
-  liElement.innerText = email + ': ' + text;
+  const imgElement = document.createElement('img');
+  imgElement.src = imageUrl;
+  liElement.innerText = email + ': ' + text + imgElement;
   return liElement;
 }
 
@@ -95,12 +97,20 @@ function getLoginStatus() {
 function fetchBlobstoreUrl() {
   fetch('/blobstore-upload-url')
       .then((response) => {
+        console.log(response);
         return response.text();
       })
-      .then((uploadUrl) => {
-        const messageForm = document.getElementById('my-form');
-        console.log(uploadUrl);
-        const imgElement = document.createElement('img');
-        // imgElement.src = uploadUrl;
+      .then((imageUploadUrl) => {
+        const messageForm = document.getElementById('comments-form');
+        messageForm.action = imageUploadUrl;
+        messageForm.classList.remove('hidden');
       });
 }
+
+/**
+ * Calls all functions necessary to initialize page.
+ */
+ function initializePage() {
+   getLoginStatus();
+   fetchBlobstoreUrl();
+ }
