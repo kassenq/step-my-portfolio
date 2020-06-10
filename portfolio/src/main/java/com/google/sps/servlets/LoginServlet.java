@@ -31,7 +31,7 @@ public class LoginServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html");
+    response.setContentType("application/json");
 
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
@@ -41,7 +41,6 @@ public class LoginServlet extends HttpServlet {
 
       String loginMessage = "Hello! Log out <a href=\"" + logoutUrl + "\">here</a>.";
       UserStatus userStatus = new UserStatus(userService.isUserLoggedIn(), loginMessage);
-      response.setContentType("application/json");
       response.getWriter().println(GSON.toJson(userStatus));
     } else {
       String urlToRedirectToAfterUserLogsIn = "/comments.html";
@@ -50,7 +49,6 @@ public class LoginServlet extends HttpServlet {
       String loginMessage =
           "You must be logged in to post comments. Log in <a href=\"" + loginUrl + "\">here</a>.";
       UserStatus userStatus = new UserStatus(userService.isUserLoggedIn(), loginMessage);
-      response.setContentType("application/json");
       response.getWriter().println(GSON.toJson(userStatus));
     }
   }

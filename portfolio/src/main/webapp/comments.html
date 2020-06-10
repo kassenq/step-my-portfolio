@@ -36,7 +36,7 @@
       <div id="handle-login"></div>
       <br /><br />
 
-      <div id="comments-form-div">
+      <div id="comments-form-div" style="display: hidden;">
         <form action="/data" method="post" id="comments-form">
           <p>First Name:</p>
           <input type="text" name="name-input" />
@@ -64,7 +64,7 @@
         <button class="btn btn-default" onclick="getCommentData()" type="button">Load Previous Comments</button>
         <br />
         <ul id="fetch"></ul>
-        <div id="delete-button-id">
+        <div id="delete-button-id" style="display:hidden;">
           <button class="btn btn-default" onclick="deleteCommentData()" type="button">Delete Previous Comments</button>
         </div>
         <br />

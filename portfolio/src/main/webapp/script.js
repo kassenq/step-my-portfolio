@@ -77,6 +77,7 @@ function getLoginStatus() {
   fetch('/login').then(response => response.json()).then((userStatus) => {
     if (userStatus.isLoggedIn) {
       document.getElementById('comments-form-div').style.display = 'show';
+      document.getElementById('delete-button-id').style.display = 'show';
       document.getElementById('handle-login').innerHTML =
           userStatus.loginMessage;
     } else {
