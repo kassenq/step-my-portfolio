@@ -53,8 +53,11 @@
           <textarea name="text-input"></textarea>
           <br /><br />
           <div id="image-upload-div" style="text-align:center;">
-            <p>Upload an image:</p>
-            <input type="file" name="image" style="margin-left:45%;">
+            <form id="my-form" action="/blobstore-upload-url" class="hidden" method="post" enctype="multipart/form-data">
+              <p>Upload an image:</p>
+              <input type="file" name="image" style="margin-left:45%;">
+              <button class="btn btn-default" type="button" onclick="fetchBlobstoreUrl()">Upload Image</button>
+            </form>
           </div>
           <br /><br />
           <p>Alphabetize all the words in your comment if you want:</p>

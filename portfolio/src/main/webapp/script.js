@@ -51,10 +51,6 @@ function getCommentData() {
           createListElement(comment.email, comment.text));
     })
   });
-
-  // fetch('/login').then((response) => response.json()).then((userStatus) => {
-
-  // });
 }
 
 /**
@@ -91,4 +87,20 @@ function getLoginStatus() {
           messageElement.innerText;
     }
   });
+}
+
+/**
+ * Fetch URL of user-uploaded image from Blobstore servlet.
+ */
+function fetchBlobstoreUrl() {
+  fetch('/blobstore-upload-url')
+      .then((response) => {
+        return response.text();
+      })
+      .then((uploadUrl) => {
+        const messageForm = document.getElementById('my-form');
+        console.log(uploadUrl);
+        const imgElement = document.createElement('img');
+        // imgElement.src = uploadUrl;
+      });
 }
