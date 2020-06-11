@@ -29,11 +29,9 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginServlet extends HttpServlet {
   public static final Gson GSON = new Gson();
 
-  // public static final HashMap<Boolean, String> loginInfo = new HashMap<Boolean, String>();
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html");
+    response.setContentType("application/json");
 
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
@@ -41,19 +39,16 @@ public class LoginServlet extends HttpServlet {
       String urlToRedirectToAfterUserLogsOut = "/";
       String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
 
-      String loginMessage = "Hello! Logout <a href=\"" + logoutUrl + "\">here</a>.";
-      Boolean isLoggedIn = userService.isUserLoggedIn();
-      UserStatus userStatus = new UserStatus(isLoggedIn, loginMessage);
-      response.setContentType("application/json");
+      String loginMessage = "Hello! Log out <a href=\"" + logoutUrl + "\">here</a>.";
+      UserStatus userStatus = new UserStatus(userService.isUserLoggedIn(), loginMessage);
       response.getWriter().println(GSON.toJson(userStatus));
     } else {
       String urlToRedirectToAfterUserLogsIn = "/comments.html";
       String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
 
-      String loginMessage = "Hello! Login <a href=\"" + loginUrl + "\">here</a>.";
-      Boolean isLoggedIn = userService.isUserLoggedIn();
-      UserStatus userStatus = new UserStatus(isLoggedIn, loginMessage);
-      response.setContentType("application/json");
+      String loginMessage =
+          "You must be logged in to post comments. Log in <a href=\"" + loginUrl + "\">here</a>.";
+      UserStatus userStatus = new UserStatus(userService.isUserLoggedIn(), loginMessage);
       response.getWriter().println(GSON.toJson(userStatus));
     }
   }
