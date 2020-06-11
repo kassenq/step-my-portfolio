@@ -60,7 +60,8 @@ function createListElement(email, text, imageUrl) {
   const liElement = document.createElement(COMMENT_CHILD_TAG);
   const imgElement = document.createElement('img');
   imgElement.src = imageUrl;
-  liElement.innerText = email + ': ' + text + imgElement;
+  liElement.innerText = email + ': ' + text;
+  liElement.appendChild(imgElement);
   return liElement;
 }
 
