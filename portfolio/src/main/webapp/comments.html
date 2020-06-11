@@ -36,7 +36,7 @@
       <div id="handle-login"></div>
       <br /><br />
 
-      <div id="comments-form-div" style="display: hidden;">
+      <div id="comments-form-div">
         <form action="/data" method="post" id="comments-form">
           <p>First Name:</p>
           <input type="text" name="name-input" />
@@ -44,9 +44,7 @@
           <p>Enter a comment:</p>
           <textarea name="text-input"></textarea>
           <br /><br />
-          <p>Alphabetize all the words in your comment if you want:</p>
-          <input type="checkbox" name="sort" value="true" /> Alphabetize <br /><br />
-          <button class="btn btn-default" type="submit">Submit</button>
+          <button class="btn btn-default" id="submit-button" type="submit">Submit</button>
         </form>
       </div>
 
@@ -61,10 +59,12 @@
           <option value="5">5</option>
         </select>
         <br /><br />
-        <button class="btn btn-default" onclick="getCommentData()" type="button">Load Previous Comments</button>
+        <div id="load-button-div">
+          <button class="btn btn-default" onclick="getCommentData()" type="button">Load Previous Comments</button>
+        </div>
         <br />
         <ul id="fetch"></ul>
-        <div id="delete-button-id" style="display:hidden;">
+        <div id="delete-button-div">
           <button class="btn btn-default" onclick="deleteCommentData()" type="button">Delete Previous Comments</button>
         </div>
         <br />
