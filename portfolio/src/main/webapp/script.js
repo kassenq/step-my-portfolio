@@ -113,7 +113,7 @@ function fetchBlobstoreUrl() {
 /**
  * Calls all functions necessary to initialize page.
  */
- function initializePage() {
-   getLoginStatus();
-   fetchBlobstoreUrl();
- }
+function initializePage() {
+  getLoginStatus();
+  fetchBlobstoreUrl();
+}
