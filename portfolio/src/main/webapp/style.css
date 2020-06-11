@@ -20,7 +20,6 @@ a:hover {
   color: rgb(209, 124, 124);
 }
 #delete-button-div,
-#submit-button,
 #comments-form-div {
   display: hidden;
 }

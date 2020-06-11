@@ -79,12 +79,12 @@ function deleteCommentData() {
 function getLoginStatus() {
   fetch('/login').then(response => response.json()).then((userStatus) => {
     if (userStatus.isLoggedIn) {
+      document.getElementById('comments-form-div').style.display = 'show';
       document.getElementById('delete-button-div').style.display = 'show';
-      document.getElementById('comments-form').style.display = 'show';
       document.getElementById('handle-login').innerHTML =
           userStatus.loginMessage;
     } else {
-      document.getElementById('comments-form').style.display = 'none';
+      document.getElementById('comments-form-div').style.display = 'none';
       document.getElementById('delete-button-div').style.display = 'none';
       const messageElement = document.createElement(COMMENT_CHILD_TAG);
       messageElement.innerText = userStatus.loginMessage;
