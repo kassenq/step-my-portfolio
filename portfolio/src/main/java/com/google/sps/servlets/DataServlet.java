@@ -84,7 +84,7 @@ public class DataServlet extends HttpServlet {
     long timestamp = System.currentTimeMillis();
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
-    String imageUrl = getUploadedFileUrl(request, Keys.IMAGE);
+    String imageUrl = getUploadedFileUrl(request);
 
     // Create new Entity with kind Comment and set properties with keys and values.
     Entity commentEntity = new Entity(Keys.COMMENT_KIND);
@@ -114,7 +114,7 @@ public class DataServlet extends HttpServlet {
   }
 
   /** Returns a URL that points to the uploaded file, or null if the user didn't upload a file. */
-  private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
+  private String getUploadedFileUrl(HttpServletRequest request) {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get(Keys.IMAGE);

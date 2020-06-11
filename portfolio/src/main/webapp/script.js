@@ -74,9 +74,10 @@ function deleteCommentData() {
 }
 
 /**
- * Fetch user login status from LoginServlet.
+ * Calls all functions necessary to initialize page.
  */
-function getLoginStatus() {
+function initializePage() {
+  // Fetch user login status from LoginServlet.
   fetch('/login').then(response => response.json()).then((userStatus) => {
     if (userStatus.isLoggedIn) {
       document.getElementById('comments-form-div').style.display = 'show';
@@ -92,15 +93,9 @@ function getLoginStatus() {
           messageElement.innerText;
     }
   });
-}
-
-/**
- * Fetch URL of user-uploaded image from Blobstore servlet.
- */
-function fetchBlobstoreUrl() {
+  // Fetch URL of user-uploaded image from Blobstore servlet
   fetch('/blobstore-upload-url')
       .then((response) => {
-        console.log(response);
         return response.text();
       })
       .then((imageUploadUrl) => {
@@ -108,12 +103,4 @@ function fetchBlobstoreUrl() {
         messageForm.action = imageUploadUrl;
         messageForm.classList.remove('hidden');
       });
-}
-
-/**
- * Calls all functions necessary to initialize page.
- */
-function initializePage() {
-  getLoginStatus();
-  fetchBlobstoreUrl();
 }
