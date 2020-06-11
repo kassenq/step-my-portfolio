@@ -31,3 +31,7 @@ a:hover {
   width: 25em;
   height: auto;
 }
+#delete-button-div,
+#comments-form-div {
+  display: hidden;
+}

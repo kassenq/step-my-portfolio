@@ -19,13 +19,15 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
 import com.google.sps.data.Keys;
 import java.io.IOException;
 import java.lang.Integer;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +36,6 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that handles comment data. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-
   public static final Gson GSON = new Gson();
 
   @Override
@@ -43,6 +44,7 @@ public class DataServlet extends HttpServlet {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
+    UserService userService = UserServiceFactory.getUserService();
 
     // Loop over entities.
     List<Comment> comments = new ArrayList<>();
@@ -51,12 +53,12 @@ public class DataServlet extends HttpServlet {
       String name = (String) entity.getProperty(Keys.NAME);
       String text = (String) entity.getProperty(Keys.TEXT);
       long timestamp = (long) entity.getProperty(Keys.TIMESTAMP);
-      comments.add(new Comment(name, text, timestamp));
+      String email = (String) entity.getProperty(Keys.EMAIL);
+      comments.add(new Comment(name, text, timestamp, email));
       if (comments.size() == max) {
         break;
       }
     }
-
     response.setContentType("application/json;");
     response.getWriter().println(GSON.toJson(comments));
   }
@@ -67,12 +69,15 @@ public class DataServlet extends HttpServlet {
     String name = getParameter(request, Keys.NAME_INPUT, Keys.EMPTY_STRING);
     String text = getParameter(request, Keys.TEXT_INPUT, Keys.EMPTY_STRING);
     long timestamp = System.currentTimeMillis();
+    UserService userService = UserServiceFactory.getUserService();
+    String email = userService.getCurrentUser().getEmail();
 
     // Create new Entity with kind Comment and set properties with keys and values.
     Entity commentEntity = new Entity(Keys.COMMENT_KIND);
     commentEntity.setProperty(Keys.NAME, name);
     commentEntity.setProperty(Keys.TEXT, text);
     commentEntity.setProperty(Keys.TIMESTAMP, timestamp);
+    commentEntity.setProperty(Keys.EMAIL, email);
 
     // Create instance of DatastoreService class and store entity.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

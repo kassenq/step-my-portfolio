@@ -14,7 +14,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
   </head>
-  <body id="body">
+  <body id="body" onload="getLoginStatus()">
     <div id="content">
       <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -31,34 +31,44 @@
       </nav>
 
       <h1>Leave a Comment</h1>
+      <br /><br />
 
-      <form action="/data" method="post">
-        <p>First Name:</p>
-        <input type="text" name="name-input" />
-        <br /><br />
-        <p>Enter a comment:</p>
-        <textarea name="text-input"></textarea>
-        <br /><br />
-        <p>Alphabetize all the words in your comment if you want:</p>
-        <input type="checkbox" name="sort" value="true" /> Alphabetize <br /><br />
-        <button class="btn btn-default" type="submit">Submit</button>
-      </form>
+      <div id="handle-login"></div>
+      <br /><br />
+
+      <div id="comments-form-div">
+        <form action="/data" method="post" id="comments-form">
+          <p>First Name:</p>
+          <input type="text" name="name-input" />
+          <br /><br />
+          <p>Enter a comment:</p>
+          <textarea name="text-input"></textarea>
+          <br /><br />
+          <button class="btn btn-default" id="submit-button" type="submit">Submit</button>
+        </form>
+      </div>
 
       <br /><br />
-      <p>Pick the number of previous comments:</p>
-      <select id="num">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
-      <br /><br />
-      <button class="btn btn-default" onclick="getCommentData()" type="button">Load Previous Comments</button>
-      <br />
-      <ul id="fetch"></ul>
-      <button class="btn btn-default" onclick="deleteCommentData()" type="button">Delete Previous Comments</button>
-      <br />
+      <div id="view-comments-div">
+        <p>Pick the number of previous comments to display:</p>
+        <select id="num">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <br /><br />
+        <div id="load-button-div">
+          <button class="btn btn-default" onclick="getCommentData()" type="button">Load Previous Comments</button>
+        </div>
+        <br />
+        <ul id="fetch"></ul>
+        <div id="delete-button-div">
+          <button class="btn btn-default" onclick="deleteCommentData()" type="button">Delete Previous Comments</button>
+        </div>
+        <br />
+      </div>
     </div>
   </body>
 </html>

@@ -15,16 +15,14 @@
 package com.google.sps.data;
 
 /*
- * Store Keys used in servlets.
+ * Create custom User class for login info.
  */
-public final class Keys {
-  public static final String NAME = "name";
-  public static final String TEXT = "text";
-  public static final String TIMESTAMP = "timestamp";
-  public static final String EMAIL = "email";
-  public static final String NAME_INPUT = "name-input";
-  public static final String TEXT_INPUT = "text-input";
-  public static final String EMPTY_STRING = "";
-  public static final String COMMENT_KIND = "Comment";
-  public static final String MAX = "max";
+public final class UserStatus {
+  public final boolean isLoggedIn;
+  public final String loginMessage;
+
+  public UserStatus(boolean isLoggedIn, String loginMessage) {
+    this.isLoggedIn = isLoggedIn;
+    this.loginMessage = loginMessage;
+  }
 }
