@@ -20,7 +20,8 @@ a:hover {
   color: rgb(209, 124, 124);
 }
 #delete-button-div,
-#comments-form-div {
+#comments-form-div,
+#comments-form {
   display: hidden;
 }
 .fa {
