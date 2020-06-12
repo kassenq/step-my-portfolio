@@ -45,7 +45,6 @@ public class LoginServlet extends HttpServlet {
     } else {
       String urlToRedirectToAfterUserLogsIn = "/comments.html";
       String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
-
       String loginMessage =
           "You must be logged in to post comments. Log in <a href=\"" + loginUrl + "\">here</a>.";
       UserStatus userStatus = new UserStatus(userService.isUserLoggedIn(), loginMessage);

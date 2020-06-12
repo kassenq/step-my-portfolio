@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const COMMENT_CHILD_TAG = 'p';
+const COMMENT_P_TAG = 'p';
+const COMMENT_IMAGE_TAG = 'img';
 const POST = 'POST';
 const FETCH_ID = 'fetch';
 const BODY_ID = 'body';
@@ -57,11 +58,13 @@ function getCommentData() {
  * Create a list element for comments to be formatted when displayed.
  */
 function createListElement(email, text, imageUrl) {
-  const liElement = document.createElement(COMMENT_CHILD_TAG);
-  const imgElement = document.createElement('img');
-  imgElement.src = imageUrl;
+  const liElement = document.createElement(COMMENT_P_TAG);
   liElement.innerText = email + ': ' + text;
-  liElement.appendChild(imgElement);
+  if (imageUrl != null && imageUrl != '') {
+    const imgElement = document.createElement(COMMENT_IMAGE_TAG);
+    imgElement.src = imageUrl;
+    liElement.appendChild(imgElement);
+  }
   return liElement;
 }
 
@@ -87,7 +90,7 @@ function initializePage() {
     } else {
       document.getElementById('comments-form-div').style.display = 'none';
       document.getElementById('delete-button-div').style.display = 'none';
-      const messageElement = document.createElement(COMMENT_CHILD_TAG);
+      const messageElement = document.createElement(COMMENT_P_TAG);
       messageElement.innerText = userStatus.loginMessage;
       document.getElementById('handle-login').innerHTML =
           messageElement.innerText;
