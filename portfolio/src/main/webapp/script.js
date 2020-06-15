@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const COMMENT_CHILD_TAG = 'p';
+const COMMENT_P_TAG = 'p';
+const COMMENT_IMAGE_TAG = 'img';
 const POST = 'POST';
 const FETCH_ID = 'fetch';
 const BODY_ID = 'body';
@@ -48,7 +49,7 @@ function getCommentData() {
     const commentListElement = document.getElementById(FETCH_ID);
     comments.forEach((comment) => {
       commentListElement.appendChild(
-          createListElement(comment.email, comment.text));
+          createListElement(comment.email, comment.text, comment.imageUrl));
     })
   });
 }
@@ -56,9 +57,14 @@ function getCommentData() {
 /**
  * Create a list element for comments to be formatted when displayed.
  */
-function createListElement(email, text) {
-  const liElement = document.createElement(COMMENT_CHILD_TAG);
+function createListElement(email, text, imageUrl) {
+  const liElement = document.createElement(COMMENT_P_TAG);
   liElement.innerText = email + ': ' + text;
+  if (imageUrl != null && imageUrl != '') {
+    const imgElement = document.createElement(COMMENT_IMAGE_TAG);
+    imgElement.src = imageUrl;
+    liElement.appendChild(imgElement);
+  }
   return liElement;
 }
 
@@ -71,22 +77,35 @@ function deleteCommentData() {
 }
 
 /**
- * Fetch user login status from LoginServlet.
+ * Calls all functions necessary to initialize page.
  */
-function getLoginStatus() {
+function initializePage() {
+  // Fetch user login status from LoginServlet.
   fetch('/login').then(response => response.json()).then((userStatus) => {
     if (userStatus.isLoggedIn) {
       document.getElementById('comments-form-div').style.display = 'show';
+      document.getElementById('comments-form').style.display = 'show';
       document.getElementById('delete-button-div').style.display = 'show';
       document.getElementById('handle-login').innerHTML =
           userStatus.loginMessage;
     } else {
       document.getElementById('comments-form-div').style.display = 'none';
+      document.getElementById('comments-form').style.display = 'none';
       document.getElementById('delete-button-div').style.display = 'none';
-      const messageElement = document.createElement(COMMENT_CHILD_TAG);
+      const messageElement = document.createElement(COMMENT_P_TAG);
       messageElement.innerText = userStatus.loginMessage;
       document.getElementById('handle-login').innerHTML =
           messageElement.innerText;
     }
   });
+  // Fetch URL of user-uploaded image from Blobstore servlet
+  fetch('/blobstore-upload-url')
+      .then((response) => {
+        return response.text();
+      })
+      .then((imageUploadUrl) => {
+        const messageForm = document.getElementById('comments-form');
+        messageForm.action = imageUploadUrl;
+        messageForm.classList.remove('hidden');
+      });
 }

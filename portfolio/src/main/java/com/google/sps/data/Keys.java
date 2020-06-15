@@ -24,6 +24,7 @@ public final class Keys {
   public static final String EMAIL = "email";
   public static final String NAME_INPUT = "name-input";
   public static final String TEXT_INPUT = "text-input";
+  public static final String IMAGE = "image";
   public static final String EMPTY_STRING = "";
   public static final String COMMENT_KIND = "Comment";
   public static final String MAX = "max";

@@ -11,10 +11,6 @@ a {
   font-family: 'Noticia Text', serif;
   font-weight: 400;
 }
-img {
-  height: 400px;
-  width: auto;
-}
 a:link,
 a:visited,
 a:active {
@@ -23,15 +19,23 @@ a:active {
 a:hover {
   color: rgb(209, 124, 124);
 }
+#delete-button-div,
+#comments-form-div,
+#comments-form {
+  display: hidden;
+}
 .fa {
   width: 5em;
   height: auto;
 }
+img {
+  height: 400px;
+  width: auto;
+}
+#image-input {
+  margin-left: 45%;
+}
 .project-img {
   width: 25em;
   height: auto;
-}
-#delete-button-div,
-#comments-form-div {
-  display: hidden;
 }
