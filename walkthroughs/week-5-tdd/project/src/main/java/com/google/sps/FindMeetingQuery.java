@@ -65,32 +65,59 @@ public final class FindMeetingQuery {
     }
 
     // no blocked times
-    if (blockedTimes.isEmpty()) {
+    // if (blockedTimes.isEmpty()) {
+    //   ret.add(TimeRange.WHOLE_DAY);
+    //   return ret;
+    // }
+    if (blockedTimes.isEmpty() && blockedTimesOptional.isEmpty()) {
       ret.add(TimeRange.WHOLE_DAY);
       return ret;
     }
+    // consolidate if necessary 
+    if (!blockedTimes.isEmpty() && blockedTimesOptional.isEmpty()) {
+      return findFreeTimes(mergeOverlaps(blockedTimes), duration);
+    }
+    if (blockedTimes.isEmpty() && !blockedTimesOptional.isEmpty()) {
+      return findFreeTimes(mergeOverlaps(blockedTimesOptional), duration);
+    }
+    List<TimeRange> bothBlocked = new ArrayList<TimeRange>();
+    bothBlocked.addAll(blockedTimes);
+    bothBlocked.addAll(blockedTimesOptional);
+    List<TimeRange> bothFree = findFreeTimes(mergeOverlaps(bothBlocked), duration);
+    
+    if (bothFree.isEmpty()) {
+      // ignore optional attendees
+      return findFreeTimes(mergeOverlaps(blockedTimes), duration);
+    }
+    return bothFree;
+  }
 
+  private List<TimeRange> mergeOverlaps(List<TimeRange> blocked) {
     // find if blocked times have overlap and consolidate them into sorted arraylist
-    Collections.sort(blockedTimes, TimeRange.ORDER_BY_START);
-    List<TimeRange> consolidated = new ArrayList<TimeRange>();
-    consolidated.add(blockedTimes.get(0));
+    Collections.sort(blocked, TimeRange.ORDER_BY_START);
+    List<TimeRange> merged = new ArrayList<TimeRange>();
+    merged.add(blocked.get(0));
     int idx = 0;
-    for (int i = 0; i < blockedTimes.size(); i++) {
-      if (blockedTimes.get(i).overlaps(consolidated.get(idx))) {
-        consolidated.set(idx, TimeRange.fromStartEnd(
-          Math.min(consolidated.get(idx).start(), blockedTimes.get(i).start()),
-          Math.max(consolidated.get(idx).end(), blockedTimes.get(i).end()) - 1, 
+    for (int i = 0; i < blocked.size(); i++) {
+      if (blocked.get(i).overlaps(merged.get(idx))) {
+        merged.set(idx, TimeRange.fromStartEnd(
+          Math.min(merged.get(idx).start(), blocked.get(i).start()),
+          Math.max(merged.get(idx).end(), blocked.get(i).end()) - 1, 
           true));
       } else {
         idx += 1;
-        consolidated.add(blockedTimes.get(i));
+        merged.add(blocked.get(i));
       }
     }
+    return merged;
+  }
 
+  private List<TimeRange> findFreeTimes(List<TimeRange> times, long duration) {
     // loop through blocked times, add free time ranges to ret
+    List<TimeRange> ret = new ArrayList<TimeRange>();
     List<TimeRange> wholeDay = new ArrayList<>(Arrays.asList(TimeRange.WHOLE_DAY));
     int start = TimeRange.START_OF_DAY;
-    for (TimeRange time : consolidated) {
+    for (TimeRange time : times) {
       if (time.end() > start) {
         // request duration fits within available time at start
         if (time.start() - start >= duration) {
