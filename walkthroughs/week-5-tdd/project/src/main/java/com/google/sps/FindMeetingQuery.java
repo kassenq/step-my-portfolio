@@ -26,11 +26,15 @@ public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     List<TimeRange> ret = new ArrayList<TimeRange>();
 
-    Set<String> attendees =  new HashSet<String>();
-    attendees.addAll(request.getAttendees()); 
+    Set<String> mandatoryAttendees =  new HashSet<String>();
+    mandatoryAttendees.addAll(request.getAttendees()); 
 
     Set<String> optionalAttendees = new HashSet<String>();
     optionalAttendees.addAll(request.getOptionalAttendees());
+
+    Set<String> allAttendees = new HashSet<String>();
+    allAttendees.addAll(mandatoryAttendees);
+    allAttendees.addAll(optionalAttendees);
 
     long duration = request.getDuration();
 
@@ -40,56 +44,25 @@ public final class FindMeetingQuery {
     }
 
     // options for no attendees
-    if (attendees.size() == 0) {
+    if (allAttendees.size() == 0) {
       ret.add(TimeRange.WHOLE_DAY);
       return ret;
     }
 
-    // double booked people (in both event and meeting request)
-    List<TimeRange> blockedTimes = new ArrayList<TimeRange>();
-    List<TimeRange> blockedTimesOptional = new ArrayList<TimeRange>();
-    for (Event event : events) {
-      Set<String> eventAttendees = event.getAttendees();
-      Set<String> overlappingAttendees = new HashSet<>(eventAttendees);
-      overlappingAttendees.retainAll(attendees);
-      Set<String> overlappingAttendeesOptional = new HashSet<>(eventAttendees);
-      overlappingAttendeesOptional.retainAll(optionalAttendees);
-
-      if (!overlappingAttendees.isEmpty()){
-        blockedTimes.add(event.getWhen());
-      }
-      
-      if (!overlappingAttendeesOptional.isEmpty()) {
-        blockedTimesOptional.add(event.getWhen());
-      }
+    // find free times
+    List<TimeRange> freeTimes = new ArrayList<TimeRange>(findFreeTimes(allAttendees, events, request));
+    if (freeTimes.isEmpty()) {
+      // ignore optional attendees if there are no free times across both mandatory and optional attendees
+      freeTimes = new ArrayList<TimeRange>(findFreeTimes(mandatoryAttendees, events, request));
+    } else {
+      return freeTimes;
     }
 
-    // no blocked times
-    // if (blockedTimes.isEmpty()) {
-    //   ret.add(TimeRange.WHOLE_DAY);
-    //   return ret;
-    // }
-    if (blockedTimes.isEmpty() && blockedTimesOptional.isEmpty()) {
-      ret.add(TimeRange.WHOLE_DAY);
-      return ret;
+    // adhere to additional test requirement
+    if (mandatoryAttendees.isEmpty()) {
+      return new ArrayList<TimeRange>();
     }
-    // consolidate if necessary 
-    if (!blockedTimes.isEmpty() && blockedTimesOptional.isEmpty()) {
-      return findFreeTimes(mergeOverlaps(blockedTimes), duration);
-    }
-    if (blockedTimes.isEmpty() && !blockedTimesOptional.isEmpty()) {
-      return findFreeTimes(mergeOverlaps(blockedTimesOptional), duration);
-    }
-    List<TimeRange> bothBlocked = new ArrayList<TimeRange>();
-    bothBlocked.addAll(blockedTimes);
-    bothBlocked.addAll(blockedTimesOptional);
-    List<TimeRange> bothFree = findFreeTimes(mergeOverlaps(bothBlocked), duration);
-    
-    if (bothFree.isEmpty()) {
-      // ignore optional attendees
-      return findFreeTimes(mergeOverlaps(blockedTimes), duration);
-    }
-    return bothFree;
+    return freeTimes;
   }
 
   private List<TimeRange> mergeOverlaps(List<TimeRange> blocked) {
@@ -112,25 +85,46 @@ public final class FindMeetingQuery {
     return merged;
   }
 
-  private List<TimeRange> findFreeTimes(List<TimeRange> times, long duration) {
+  private List<TimeRange> findFreeTimes(Set<String> attendees, Collection<Event> events, MeetingRequest request) {
     // loop through blocked times, add free time ranges to ret
-    List<TimeRange> ret = new ArrayList<TimeRange>();
-    List<TimeRange> wholeDay = new ArrayList<>(Arrays.asList(TimeRange.WHOLE_DAY));
-    int start = TimeRange.START_OF_DAY;
-    for (TimeRange time : times) {
-      if (time.end() > start) {
-        // request duration fits within available time at start
-        if (time.start() - start >= duration) {
-          ret.add(TimeRange.fromStartEnd(start, time.start(), false));
-        }
-        // move to next available free block
-        start = time.end();
+    List<TimeRange> freeTimes = new ArrayList<TimeRange>();
+    List<TimeRange> blockedTimes = new ArrayList<TimeRange>();
+    long duration = request.getDuration();
+
+    for (Event event : events) {
+      Set<String> eventAttendees = event.getAttendees();
+      Set<String> overlappingAttendees = new HashSet<>(eventAttendees);
+      overlappingAttendees.retainAll(attendees);
+      if (!overlappingAttendees.isEmpty()) {
+        blockedTimes.add(event.getWhen());
       }
     }
+
+    int start = TimeRange.START_OF_DAY;
+
+    // find all time ranges between blocked times that contain request duration time
+    for (TimeRange blockedTime : blockedTimes) {
+      if (blockedTime.end() > start) {
+        if (blockedTime.start() - start >= duration) {
+          freeTimes.add(TimeRange.fromStartEnd(start, blockedTime.start(), false));
+        }
+        start = blockedTime.end(); 
+      }
+    }
+
     // request duration fits within available time at end
     if (TimeRange.END_OF_DAY - start >= duration) {
-      ret.add(TimeRange.fromStartEnd(start, TimeRange.END_OF_DAY, true));
+      freeTimes.add(TimeRange.fromStartEnd(start, TimeRange.END_OF_DAY, true));
     }
-    return ret;
+
+    // double check for overlap
+    for (int i = 0; i < freeTimes.size(); i++) {
+      for (TimeRange blockedTime: blockedTimes) {
+        if (freeTimes.get(i).overlaps(blockedTime)) {
+          freeTimes.remove(freeTimes.get(i));
+        }
+      }
+    }
+    return freeTimes;
   }
 }
