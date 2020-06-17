@@ -71,10 +71,10 @@ public final class FindMeetingQuery {
   }
 
   private List<TimeRange> findFreeTimes(Set<String> attendees, Collection<Event> events, long duration) {
-    // loop through blocked times, add free time ranges to ret
     List<TimeRange> freeTimes = new ArrayList<TimeRange>();
     List<TimeRange> blockedTimes = new ArrayList<TimeRange>();
 
+    // find all blocked times based on double-booked attendees
     for (Event event : events) {
       if(event.getAttendees().stream().anyMatch(attendees::contains)) {
         blockedTimes.add(event.getWhen());
@@ -82,8 +82,8 @@ public final class FindMeetingQuery {
     }
 
     int lastBlockedTimeEnd = TimeRange.START_OF_DAY;
-
     Collections.sort(blockedTimes, TimeRange.ORDER_BY_START);
+
     // find all time ranges between blocked times that contain request duration time
     for (TimeRange blockedTime : blockedTimes) {
       if (blockedTime.end() > lastBlockedTimeEnd) {
