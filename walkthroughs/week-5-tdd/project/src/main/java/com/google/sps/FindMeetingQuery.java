@@ -13,7 +13,6 @@
 // limitations under the License.
 
 package com.google.sps;
-// import com.google.sps.servlets.TimeRange;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
@@ -49,24 +48,24 @@ public final class FindMeetingQuery {
     allAttendees.addAll(optionalAttendees);
 
     // options for no attendees
-    if (allAttendees.size() == 0) {
+    if (allAttendees.isEmpty()) {
       ret.add(TimeRange.WHOLE_DAY);
       return ret;
     }
 
     // find free times
     List<TimeRange> freeTimes = new ArrayList<TimeRange>(findFreeTimes(allAttendees, events, duration));
+  
+
     if (freeTimes.isEmpty()) {
+      // adhere to additional test requirement
+      if (mandatoryAttendees.isEmpty()) {
+        return new ArrayList<TimeRange>();
+      }
       // ignore optional attendees if there are no free times across both mandatory and optional attendees
       freeTimes = new ArrayList<TimeRange>(findFreeTimes(mandatoryAttendees, events, duration));
-    } else {
-      return freeTimes;
     }
 
-    // adhere to additional test requirement
-    if (mandatoryAttendees.isEmpty()) {
-      return new ArrayList<TimeRange>();
-    }
     return freeTimes;
   }
 
