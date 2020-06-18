@@ -21,13 +21,15 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * Returns possible meeting times on a certain day given a meeting request.
- */
+
 public final class FindMeetingQuery {
 
   public static final int MINUTES_IN_DAY = 1440;
 
+  /**
+  * Returns possible meeting times on a certain day given a meeting request.
+  * Handles requests with only mandatory attendees, only optional attendees, both, and neither.
+  */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     List<TimeRange> ret = new ArrayList<TimeRange>();
     long duration = request.getDuration();
@@ -56,9 +58,8 @@ public final class FindMeetingQuery {
     // find free times
     List<TimeRange> freeTimes = new ArrayList<TimeRange>(findFreeTimes(allAttendees, events, duration));
   
-
     if (freeTimes.isEmpty()) {
-      // adhere to additional test requirement
+      // return empty list if there are no mandatory attendees and no free times for optional attendees
       if (mandatoryAttendees.isEmpty()) {
         return new ArrayList<TimeRange>();
       }
