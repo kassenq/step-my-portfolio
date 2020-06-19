@@ -28,7 +28,11 @@ public final class FindMeetingQuery {
 
   /**
   * Returns possible meeting times on a certain day given a meeting request.
-  * Handles requests with only mandatory attendees, only optional attendees, both, and neither.
+  * If there are free time slots for both mandatory and optional attendees, those times will be returned.
+  * If there are no free time slots for both mandatory and optional attendees, only free times for mandatory
+  * attendees will be considered and returned.
+  * If there are no mandatory attendees and no free times for optional attendees, an empty list
+  * will be returned.
   */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     List<TimeRange> ret = new ArrayList<TimeRange>();
